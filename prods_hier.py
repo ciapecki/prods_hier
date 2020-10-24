@@ -1,6 +1,13 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
+
+import sys, datetime
+import uno
+from com.sun.star.sheet.CellInsertMode import DOWN
+from com.sun.star.util import Date
+from com.sun.star.sheet import DateType
+
 # useful for debug
 from apso_utils import msgbox
 
@@ -8,7 +15,6 @@ def get_color(red, green, blue):
     color = (red << 16) + (green << 8) + blue
     return color
 
-msgbox(datetime.today().strftime("%Y-%m"))
 
 # 1) Get values from sheet
 #desktop = XSCRIPTCONTEXT.getDesktop()
@@ -19,9 +25,14 @@ doc = XSCRIPTCONTEXT.getDocument()
 sheet = doc.getCurrentController().getActiveSheet()
 # msgbox(sheet.Name)
 
-doc.Sheets.insertNewByName('hierarchy', 1)
+#msgbox(str(datetime.datetime.now().date().strftime("%B%Y")))
 
-sheet_out = doc.Sheets['hierarchy']
+sheet_out_name = str('Products_' + datetime.date.today().strftime("%B%Y"))
+
+
+doc.Sheets.insertNewByName(sheet_out_name, 1)
+
+sheet_out = doc.Sheets[sheet_out_name]
 sheet_out.TabColor = get_color(255, 0, 0)
 
 #copy whole row from current to out
@@ -80,4 +91,4 @@ sheet_out.getColumns().Width = 2000
 sheet_out.getColumns().getByName("G").Width = 10000
 #sheet_out.freeze_panes(1,1)
 
-XSCRIPTCONTEXT.getDocument().getCurrentController().getActiveSheet().freeze_panes(1,1)
+XSCRIPTCONTEXT.getDocument().getCurrentController().freezeAtPosition(0,1)
