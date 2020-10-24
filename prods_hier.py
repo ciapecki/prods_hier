@@ -16,20 +16,14 @@ def get_color(red, green, blue):
     return color
 
 
-# 1) Get values from sheet
-#desktop = XSCRIPTCONTEXT.getDesktop()
-#model = desktop.getCurrentComponent()
-#sheet = model.CurrentController.ActiveSheet
 
 doc = XSCRIPTCONTEXT.getDocument()
 sheet = doc.getCurrentController().getActiveSheet()
-# msgbox(sheet.Name)
-
-#msgbox(str(datetime.datetime.now().date().strftime("%B%Y")))
 
 sheet_out_name = str('Products_' + datetime.date.today().strftime("%B%Y"))
+#In [4]: datetime.date.today().strftime("%B%Y")
+#Out[4]: 'October2020'
 
-#doc.Sheets.insertNewByName(sheet_out_name, 1)
 try:
     doc.Sheets.insertNewByName(sheet_out_name, 1)
 
@@ -39,7 +33,6 @@ try:
 
     #copy whole row from current to out
     RngAddr = sheet.getCellRangeByName("A1:G1").getRangeAddress() 
-
     cell = sheet_out.getCellRangeByName('A1')
     cellAddr = cell.CellAddress #use this as the upper left of the paste range
 
