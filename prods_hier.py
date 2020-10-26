@@ -7,6 +7,10 @@ import uno
 from com.sun.star.sheet.CellInsertMode import DOWN
 from com.sun.star.util import Date
 from com.sun.star.sheet import DateType
+from com.sun.star.frame import XDispatchHelper
+from com.sun.star.beans import PropertyValue
+
+
 
 # useful for debug
 from apso_utils import msgbox
@@ -14,6 +18,24 @@ from apso_utils import msgbox
 def get_color(red, green, blue):
     color = (red << 16) + (green << 8) + blue
     return color
+
+
+CTX = uno.getComponentContext()
+SM = CTX.getServiceManager()
+
+def create_instance(name, with_context=False):
+    if with_context:
+        instance = SM.createInstanceWithContext(name, CTX)
+    else:
+        instance = SM.createInstance(name)
+    return instance
+
+def call_dispatch(doc, url, args=()):
+    frame = doc.getCurrentController().getFrame()
+    dispatch = create_instance('com.sun.star.frame.DispatchHelper')
+    dispatch.executeDispatch(frame, url, '', 0, args)
+    return
+
 
 
 
@@ -88,7 +110,11 @@ try:
 except Exception as ex:
     msgbox("Could not create new sheet. Maybe sheet with that name " + sheet_out_name + " already exists?")
 
+args_jump_to = ['']                            # initialize 0 element of array
+args_jump_to[0] = PropertyValue()                 # Default constructor
+args_jump_to[0].Name = "Nr"
+args_jump_to[0].Value = 2
 
+call_dispatch(doc, '.uno:JumpToTable',args_jump_to)
+call_dispatch(doc, ".uno:FreezePanesFirstRow")
 
-
-#XSCRIPTCONTEXT.getDocument().getCurrentController().freezeAtPosition(0,1)
