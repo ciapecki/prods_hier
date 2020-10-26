@@ -13,15 +13,13 @@ from com.sun.star.beans import PropertyValue
 
 
 # useful for debug
-from apso_utils import msgbox
+# from apso_utils import msgbox
 
 def get_color(red, green, blue):
     color = (red << 16) + (green << 8) + blue
     return color
 
 
-CTX = uno.getComponentContext()
-SM = CTX.getServiceManager()
 
 def create_instance(name, with_context=False):
     if with_context:
@@ -38,15 +36,15 @@ def call_dispatch(doc, url, args=()):
 
 
 
+def prods_hier(*args):
 
-doc = XSCRIPTCONTEXT.getDocument()
-sheet = doc.getCurrentController().getActiveSheet()
+    doc = XSCRIPTCONTEXT.getDocument()
+    sheet = doc.getCurrentController().getActiveSheet()
 
-sheet_out_name = str('Products_' + datetime.date.today().strftime("%B%Y"))
-#In [4]: datetime.date.today().strftime("%B%Y")
-#Out[4]: 'October2020'
+    sheet_out_name = str('Products_' + datetime.date.today().strftime("%B%Y"))
+    #In [4]: datetime.date.today().strftime("%B%Y")
+    #Out[4]: 'October2020'
 
-try:
     doc.Sheets.insertNewByName(sheet_out_name, 1)
 
 
@@ -107,14 +105,16 @@ try:
     sheet_out.getColumns().Width = 2000
     sheet_out.getColumns().getByName("G").Width = 10000
     #sheet_out.freeze_panes(1,1)
-except Exception as ex:
-    msgbox("Could not create new sheet. Maybe sheet with that name " + sheet_out_name + " already exists?")
 
-args_jump_to = ['']                            # initialize 0 element of array
-args_jump_to[0] = PropertyValue()                 # Default constructor
-args_jump_to[0].Name = "Nr"
-args_jump_to[0].Value = 2
+    args_jump_to = ['']                            # initialize 0 element of array
+    args_jump_to[0] = PropertyValue()                 # Default constructor
+    args_jump_to[0].Name = "Nr"
+    args_jump_to[0].Value = 2
 
-call_dispatch(doc, '.uno:JumpToTable',args_jump_to)
-call_dispatch(doc, ".uno:FreezePanesFirstRow")
+    call_dispatch(doc, '.uno:JumpToTable',args_jump_to)
+    call_dispatch(doc, ".uno:FreezePanesFirstRow")
 
+
+CTX = uno.getComponentContext()
+SM = CTX.getServiceManager()
+prods_hier()
