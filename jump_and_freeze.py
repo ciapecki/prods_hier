@@ -34,4 +34,10 @@ CTX = uno.getComponentContext()
 SM = CTX.getServiceManager()
 doc = XSCRIPTCONTEXT.getDocument()
 
-jumpFreeze()
+oDoc=XSCRIPTCONTEXT.getDocument()
+oCtrl=oDoc.CurrentController
+oTab=oDoc.Sheets.getByName("Products_October2020")
+oCtrl.setActiveSheet(oTab)
+oCtrl.freezeAtPosition(0,1)
+
+#jumpFreeze()
